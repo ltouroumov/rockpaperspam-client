@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.securingapps.rps.activity.GameSetupFragment" android:orientation="vertical">
+
+    <TextView
+            android:text="*Opponent*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/opponentName" android:gravity="center" android:padding="8dp" style="@style/opponentName"/>
+    <TextView
+            android:text="Rounds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:padding="4dp"
+            style="@style/TextAppearance.AppCompat.Headline" android:textAlignment="center"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/len_minus" android:layout_weight="0"
+                android:text="-"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/game_length" android:layout_weight="1"
+                android:text="0" android:textAlignment="center"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/len_plus"
+                android:text="+"/>
+    </LinearLayout>
+    <Button
+            android:text="Start Game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/game_start"/>
+</LinearLayout>

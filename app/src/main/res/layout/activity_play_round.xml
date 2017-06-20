@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_play_round"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.securingapps.rps.activity.PlayRoundActivity" android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary" android:padding="16dp">
+        <TextView
+                android:text="@string/versus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/opponentName" android:textAppearance="@style/opponentName"
+                android:textAlignment="center" android:textColor="?android:attr/textColorPrimaryInverse"/>
+
+        <TextView
+                android:text="@string/round_fmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/roundNumber" android:textAppearance="@style/betLabel" android:textAlignment="center"
+                android:textColor="?android:attr/textColorPrimaryInverse"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <ImageButton
+                android:contentDescription="Rock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/hand_rock"
+                android:id="@+id/playRock"
+                android:layout_weight="1" android:scaleType="fitCenter"/>
+        <ImageButton
+                android:contentDescription="Paper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/hand_paper"
+                android:id="@+id/playPaper"
+                android:layout_weight="1" android:scaleType="fitCenter"/>
+        <ImageButton
+                android:contentDescription="Scissors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/hand_scissors"
+                android:id="@+id/playScissors"
+                android:layout_weight="1" android:scaleType="fitCenter"/>
+        <ImageButton
+                android:contentDescription="Lizard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/hand_lizard"
+                android:id="@+id/playLizard"
+                android:layout_weight="1" android:scaleType="fitCenter"/>
+        <ImageButton
+                android:contentDescription="Spock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/hand_spock"
+                android:id="@+id/playSpock"
+                android:layout_weight="1" android:scaleType="fitCenter"/>
+
+    </LinearLayout>
+
+</LinearLayout>
