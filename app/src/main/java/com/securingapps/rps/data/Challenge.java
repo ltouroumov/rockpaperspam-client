@@ -100,7 +100,13 @@ public class Challenge {
     }
 
     public enum RoundStatus {
-        VICTORY("\uD83D\uDC4D"), DRAW("\uD83E\uDD37"), DEFEAT("\uD83D\uDC4E"), UNKNOWN("\u2205"), PLAYED("\u2713");
+        VICTORY("\uD83D\uDC4D"),
+        // VICTORY("\u263A"),
+        DRAW("\uD83D\uDE10"),
+        DEFEAT("\uD83D\uDC4E"),
+        // DEFEAT("\uD83D\uDE41"),
+        UNKNOWN("\u2205"),
+        PLAYED("\u2713");
 
         public final String symbol;
 

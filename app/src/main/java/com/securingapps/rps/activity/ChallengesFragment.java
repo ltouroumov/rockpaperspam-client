@@ -3,6 +3,7 @@ package com.securingapps.rps.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,13 +23,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class ChallengesFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ChallengesFragment extends Fragment implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = ChallengesFragment.class.getSimpleName();
     private ChallengeAdapter challengesAdapter;
 
     private String status;
     private OnChallengeSelected listener;
+    private SwipeRefreshLayout refreshLayout;
 
     public ChallengesFragment() {
 
@@ -65,6 +67,9 @@ public class ChallengesFragment extends Fragment implements AdapterView.OnItemCl
         challenges.setAdapter(challengesAdapter);
         challenges.setOnItemClickListener(this);
 
+        refreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(this);
+
         return view;
     }
 
@@ -77,6 +82,9 @@ public class ChallengesFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     private void buildChallengeList(Game[] games) {
+        if (games == null) {
+            return;
+        }
 
         Challenge[] challenges = new Challenge[games.length];
 
@@ -131,6 +139,16 @@ public class ChallengesFragment extends Fragment implements AdapterView.OnItemCl
         if (listener != null) {
             listener.onChallengeSelected(this, challengesAdapter.getItem(position));
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d(TAG, "Refreshing view");
+        AsyncFuture.runAsync(() -> {
+            this.reloadChallenges(null);
+        }).whenCompleteAsync(v -> {
+            refreshLayout.setRefreshing(false);
+        }, new UiRunner(getActivity()));
     }
 
     private class ChallengeAdapter extends BaseAdapter {

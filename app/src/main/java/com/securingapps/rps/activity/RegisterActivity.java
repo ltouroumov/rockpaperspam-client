@@ -25,10 +25,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onStart();
 
         AsyncFuture.runAsync(() -> {
-            Log.d(TAG, "Registering");
-            String secret = ApiProxy.getInstance().register();
-            Log.d(TAG, "Secret:" + secret);
-            DeviceData.setSecret(secret);
+            if (!DeviceData.hasSecret()) {
+                Log.d(TAG, "Registering");
+                String secret = ApiProxy.getInstance().register();
+                DeviceData.setSecret(secret);
+            } else {
+                Log.d(TAG, "Already Registered");
+            }
+            Log.d(TAG, DeviceData.getDeviceId() + ":" + DeviceData.getSecretString());
         }).thenApplyAsync(
             v -> ContactService.getInstance().syncAsync(RegisterActivity.this)
         ).whenComplete(v -> {

@@ -4,16 +4,12 @@ import android.content.Context;
 import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.*;
-import com.google.gson.stream.JsonWriter;
 import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -68,6 +64,7 @@ public class ApiProxy implements Interceptor {
         try {
             Response response = client.newCall(request).execute();
             String respBody = response.body().string();
+            Log.d(TAG, "Got JSON" + respBody);
             JsonElement respJson = (new JsonParser()).parse(respBody);
             if (respJson.isJsonObject()) {
                 JsonObject respJsonObj = respJson.getAsJsonObject();
@@ -76,6 +73,9 @@ public class ApiProxy implements Interceptor {
                 }
             }
             Log.e(TAG, "Invalid register response");
+            return null;
+        } catch (JsonSyntaxException e) {
+            Log.e(TAG, "Invalid JSON returned", e);
             return null;
         } catch (IOException e) {
             Log.e(TAG, "Register failed", e);
@@ -100,16 +100,16 @@ public class ApiProxy implements Interceptor {
         json.add("profile", profile);
         json.add("friends", friends);
 
-        File jsonFile = new File(context.getFilesDir(), "contacts.json");
-        try (
-                Writer fw = new FileWriter(jsonFile, false);
-                JsonWriter jw = new JsonWriter(fw)
-        ) {
-            gson.toJson(json, jw);
-            Log.d(TAG, jsonFile.getAbsolutePath() + " written");
-        } catch (Exception ex) {
-            Log.e(TAG, "Failed to open contacts file", ex);
-        }
+//        File jsonFile = new File(context.getFilesDir(), "contacts.json");
+//        try (
+//                Writer fw = new FileWriter(jsonFile, false);
+//                JsonWriter jw = new JsonWriter(fw)
+//        ) {
+//            gson.toJson(json, jw);
+//            Log.d(TAG, jsonFile.getAbsolutePath() + " written");
+//        } catch (Exception ex) {
+//            Log.e(TAG, "Failed to open contacts file", ex);
+//        }
 
         Request request = new Request.Builder()
                 .url(String.format("%s/api/sync", HOST))
@@ -239,4 +239,7 @@ public class ApiProxy implements Interceptor {
     }
 
 
+    public JsonElement readJson(String body) {
+        return (new JsonParser()).parse(body);
+    }
 }

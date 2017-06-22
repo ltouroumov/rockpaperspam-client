@@ -62,8 +62,15 @@ public class DeviceData {
         return secret;
     }
 
+    public synchronized static String getSecretString() {
+        if (secret == null) {
+            throw new RuntimeException("Secret not loaded");
+        }
+        return new String(Hex.encodeHex(secret));
+    }
+
     public synchronized static void setSecret(byte[] secret) {
-        String secretHex = Hex.encodeHexString(secret);
+        String secretHex = new String(Hex.encodeHex(secret));
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString(PREF_SECRET, secretHex);
         editor.apply();
@@ -95,5 +102,9 @@ public class DeviceData {
         editor.putString(PREF_FIREBASE_TOKEN, firebaseToken);
         editor.apply();
         DeviceData.firebaseToken = firebaseToken;
+    }
+
+    public static boolean hasSecret() {
+        return secret != null;
     }
 }

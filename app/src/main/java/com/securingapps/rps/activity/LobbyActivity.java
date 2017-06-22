@@ -39,7 +39,6 @@ public class LobbyActivity extends AppCompatActivity implements ChallengesFragme
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private TextView playerName;
 
     public LobbyActivity() {
     }
@@ -56,9 +55,6 @@ public class LobbyActivity extends AppCompatActivity implements ChallengesFragme
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        playerName = (TextView) findViewById(R.id.playerName);
-        playerName.setText(getString(R.string.hello, ContactService.getInstance().getProfile().getName()));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);

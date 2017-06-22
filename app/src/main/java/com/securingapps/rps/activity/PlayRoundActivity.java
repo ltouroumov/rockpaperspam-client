@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.securingapps.rps.R;
 import com.securingapps.rps.data.ApiProxy;
@@ -14,7 +16,10 @@ import com.securingapps.rps.data.FriendService;
 import com.securingapps.rps.events.InvalidateGameList;
 import com.securingapps.rps.utils.UiRunner;
 import com.securingapps.rps.utils.async.AsyncFuture;
+import okhttp3.Response;
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 
 public class PlayRoundActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -80,10 +85,35 @@ public class PlayRoundActivity extends AppCompatActivity implements View.OnClick
         body.addProperty("from", DeviceData.getDeviceId());
         body.addProperty("move", move);
         AsyncFuture
-            .runAsync(() -> ApiProxy.getInstance().doPost(body, "games/%d/%d", gameId, roundId))
-            .whenComplete(val -> {
-                EventBus.getDefault().post(new InvalidateGameList());
+            .supplyAsync(() -> ApiProxy.getInstance().doPost(body, "games/%d/%d", gameId, roundId))
+            .whenCompleteAsync(resp -> {
+                if (resp.isSuccessful()) {
+                    EventBus.getDefault().post(new InvalidateGameList());
+                } else if (isOutOfEnergy(resp)) {
+                    Toast.makeText(this, "Out of energy", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Unkown error!\nPlease try again later.", Toast.LENGTH_SHORT).show();
+                }
                 finish();
-            });
+            }, new UiRunner(this));
+    }
+
+    private boolean isOutOfEnergy(Response resp) {
+        if (resp.code() != 400)
+            return false;
+
+        try {
+            String body = resp.body().string();
+            JsonElement elem = ApiProxy.getInstance().readJson(body);
+            if (elem.isJsonObject() && elem.getAsJsonObject().has("detail")) {
+                String detail = elem.getAsJsonObject().get("detail").getAsString();
+                return detail.contains("No energy");
+            } else {
+                return false;
+            }
+        } catch (IOException ex) {
+            Log.e(TAG, "Error while getting response content", ex);
+        }
+        return false;
     }
 }
