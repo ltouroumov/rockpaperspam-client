@@ -4,10 +4,12 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.securingapps.rps.data.ContactService;
 import com.securingapps.rps.events.InvalidateGameList;
+import com.securingapps.rps.utils.async.AsyncUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
@@ -33,15 +35,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //
             if (data.containsKey("action")) {
                 String action = data.get("action");
+                Log.d(TAG, "Action:" + action);
                 switch (action) {
                     case "sync":
                         ContactService.getInstance().syncAsync(this);
+                        if (BuildConfig.DEBUG) {
+                            AsyncUtils.runOnMainThread(() -> {
+                                Toast.makeText(getApplicationContext(), "Syncing ...", Toast.LENGTH_SHORT).show();
+                            });
+                        }
                         break;
                     case "dupe":
                         long contactId = Long.parseLong(data.get("contact_id"));
                         String contactKey = data.get("contact_key");
                         String target = data.get("target");
                         ContactService.getInstance().dupeAsync(this, contactId, contactKey, target);
+                        if (BuildConfig.DEBUG) {
+                            AsyncUtils.runOnMainThread(() -> {
+                                Toast.makeText(getApplicationContext(), "Duping ...", Toast.LENGTH_SHORT).show();
+                            });
+                        }
                         break;
                     case "startGame":
                     case "gameOver":

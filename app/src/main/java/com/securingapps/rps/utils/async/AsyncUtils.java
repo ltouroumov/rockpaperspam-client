@@ -1,5 +1,7 @@
 package com.securingapps.rps.utils.async;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.securingapps.rps.utils.fn.Consumer;
 import com.securingapps.rps.utils.fn.Supplier;
 
@@ -10,6 +12,15 @@ import java.util.concurrent.Executor;
  * @created 3/23/17
  */
 public class AsyncUtils {
+
+    private static Handler handler = null;
+
+    public static synchronized void runOnMainThread(Runnable runnable) {
+        if (handler == null)
+            handler = new Handler(Looper.getMainLooper());
+
+        handler.post(runnable);
+    }
 
     public static class AsyncConsumer<T> implements Consumer<T> {
 

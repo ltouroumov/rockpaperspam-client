@@ -1,5 +1,7 @@
 package com.securingapps.rps.data;
 
+import com.securingapps.rps.utils.ArrayUtils;
+
 import java.util.Arrays;
 import java.util.Date;
 
@@ -47,8 +49,7 @@ public class Challenge {
                 }
             } else if (round.getNumber() == currentRound) {
                 int[] players = round.getPlayers();
-                Arrays.sort(players);
-                if (Arrays.binarySearch(players, self.getId()) != -1) {
+                if (ArrayUtils.contains(players, self.getId())) {
                     this.rounds[round.getNumber() - 1] = RoundStatus.PLAYED;
                 }
             }

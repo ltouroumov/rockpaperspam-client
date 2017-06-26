@@ -27,7 +27,7 @@ public class FriendService {
     private FriendService() {
 
     }
-
+    private long _lastRefresh = 0;
     private GetFriendsResponse _GetFriendsResponse = null;
     private Map<String, Friend> _friendCache = new HashMap<>();
     private Map<String, AsyncFuture<Friend>> _futureCache = new HashMap<>();
@@ -51,12 +51,16 @@ public class FriendService {
         }
     }
 
-    public AsyncFuture<Friend[]> getFriends() {
-        if (_GetFriendsResponse == null) {
+    public static long CACHE_DURATION = 5L * 60L * 1000L * 1000L * 1000L;
+
+    public synchronized AsyncFuture<Friend[]> getFriends() {
+        long now = System.nanoTime();
+        if (_GetFriendsResponse == null || Math.abs(now - _lastRefresh) >= CACHE_DURATION) {
             Log.d(TAG, "From network");
             return AsyncFuture
                 .supplyAsync(() -> api.doGetJson(GetFriendsResponse.class, "friends?of=%s", DeviceData.getDeviceId()))
                 .whenCompleteAsync(response -> {
+                    this._lastRefresh = System.nanoTime();
                     this._GetFriendsResponse = response;
                     for (Friend f : this._GetFriendsResponse.friends) {
                         _friendCache.put(f.getId(), f);

@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         writeToContacts(displayName, phoneNumber);
 
         ContactService.getInstance()
-                .loadAsync(this, true)
+                .loadAsync(this, false)
                 .whenComplete(service -> {
                     Intent intent = new Intent(this, RegisterActivity.class);
                     startActivity(intent);

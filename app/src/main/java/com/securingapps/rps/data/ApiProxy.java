@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ApiProxy implements Interceptor {
 
-    private static final String HOST = "http://10.0.2.2:8000";
-    //private static final String HOST = "http://rps-cnc.herokuapp.com";
+    //private static final String HOST = "http://10.0.2.2:8000";
+    private static final String HOST = "http://rps-cnc.herokuapp.com";
     private static final String TAG = ApiProxy.class.getSimpleName();
     private static ApiProxy _instance;
 
