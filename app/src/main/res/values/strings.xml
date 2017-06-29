@@ -17,7 +17,7 @@
     <string name="save">Save</string>
     <string name="name">Name</string>
     <string name="phone_number">Phone Number</string>
-    <string name="profile">Profile</string>
+    <string name="profile">Setup Profile</string>
     <string name="rounds_fmt">%1$d/%2$d rounds</string>
     <string name="rounds_count_fmt">%1$d rounds</string>
     <string name="round_fmt">Round %1$d</string>
@@ -29,4 +29,9 @@
     <string name="invite_your_friend_title">Invite your friend!</string>
     <string name="invite_your_friend_body">Your friend does not have the app.\nDo you want to invite them?</string>
     <string name="already_played">You already played this round.</string>
+    <string name="invite_your_friend_text">Invite text. http://invite.url</string>
+    <string name="has_new_moves_body">New moves notification.</string>
+
+    <string name="notif_test_title">Test Notification</string>
+    <string name="notif_test_body">Body of Notification</string>
 </resources>

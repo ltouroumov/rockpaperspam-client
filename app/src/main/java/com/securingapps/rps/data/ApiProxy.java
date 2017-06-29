@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.*;
+import com.securingapps.rps.BuildConfig;
 import okhttp3.*;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -19,8 +21,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ApiProxy implements Interceptor {
 
-    //private static final String HOST = "http://10.0.2.2:8000";
-    private static final String HOST = "http://rps-cnc.herokuapp.com";
+    private static final String HOST = "http://10.0.2.2:8000";
+    //private static final String HOST = "http://rps-cnc.herokuapp.com";
     private static final String TAG = ApiProxy.class.getSimpleName();
     private static ApiProxy _instance;
 
@@ -128,6 +130,13 @@ public class ApiProxy implements Interceptor {
         }
     }
 
+    public void ackNotification(int id) {
+        JsonObject body = new JsonObject();
+        body.addProperty("notification_id", id);
+
+        doPost(body, "notifications/ack");
+    }
+
     public Response doGet(String endpoint, Object... args) {
         Request request = new Request.Builder()
                 .url(buildUrl(endpoint, args))
@@ -191,14 +200,23 @@ public class ApiProxy implements Interceptor {
 
         Log.d(TAG, String.format("API > %s %s", request.method(), request.url()));
 
-        try {
-            Response response = chain.proceed(requestWithAuth);
-            Log.d(TAG, String.format("API < %d", response.code()));
-            return response;
-        } catch (IOException ex) {
-            Log.d(TAG, String.format("API < %s", ex.getMessage()));
-            throw new RuntimeException("Failed to perform API Call", ex);
+        int fails = 0;
+
+        Response response = null;
+        while(fails < 3) {
+            try {
+                response = chain.proceed(requestWithAuth);
+                Log.d(TAG, String.format("API < %d", response.code()));
+                break;
+            } catch (SocketTimeoutException ex) {
+                Log.d(TAG, "API < Request Timeout");
+                fails++;
+            } catch (IOException ex) {
+                Log.d(TAG, String.format("API < %s", ex.getMessage()));
+                throw new RuntimeException("Failed to perform API Call", ex);
+            }
         }
+        return response;
     }
 
     private String _authorization;

@@ -1,6 +1,7 @@
 package com.securingapps.rps.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class GameStartActivity
     private void sendInvite(Friend friend) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_your_friend_text));
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

@@ -46,7 +46,6 @@ public class AsyncFuture<V> implements Future<V> {
 
     public AsyncFuture<V> whenComplete(Consumer<V> consumer) {
         if (isDone) {
-            Log.d(TAG, "Already Complete!");
             consumer.accept(value);
         } else {
             onComplete.add(consumer);
