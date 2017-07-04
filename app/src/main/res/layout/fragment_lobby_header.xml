@@ -4,6 +4,7 @@
             android:rowCount="2"
             android:columnCount="3"
             android:background="@color/colorPrimary"
+            android:id="@+id/lobbyHeader"
             tools:context="com.securingapps.rps.activity.LobbyHeaderFragment" android:layout_height="120dp">
 
     <LinearLayout
@@ -63,7 +64,7 @@
             android:layout_columnWeight="1"
             android:gravity="center"
             android:layout_gravity="fill"
-            android:layout_rowWeight="1">
+            android:layout_rowWeight="1" android:id="@+id/energyView">
         <TextView
                 android:text="0"
                 android:layout_width="match_parent"

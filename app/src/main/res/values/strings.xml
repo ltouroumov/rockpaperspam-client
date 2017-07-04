@@ -34,4 +34,6 @@
 
     <string name="notif_test_title">Test Notification</string>
     <string name="notif_test_body">Body of Notification</string>
+    <string name="maximum_energy">Maximum Energy: %1$d</string>
+    <string name="regeneration_rate">Regeneration Rate: %1$.0f/h</string>
 </resources>
