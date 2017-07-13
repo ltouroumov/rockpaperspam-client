@@ -17,28 +17,26 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
 
-        <meta-data
-                android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@drawable/rps_circle_shadow" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+                   android:resource="@drawable/rps_circle_shadow"/>
 
-        <activity android:name=".activity.Startup">
+        <activity android:name=".activity.Startup"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".activity.LobbyActivity"
-                android:label="@string/title_activity_lobby"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:launchMode="singleTop">
+        <activity android:name=".activity.LobbyActivity"
+                  android:label="@string/title_activity_lobby"
+                  android:theme="@style/AppTheme.NoActionBar"
+                  android:launchMode="singleTop">
         </activity>
-        <activity
-                android:name=".activity.GameStartActivity"
-                android:label="@string/title_activity_pick_friend">
+        <activity android:name=".activity.GameStartActivity"
+                  android:label="@string/title_activity_pick_friend">
         </activity>
 
         <service android:name=".MyFirebaseMessagingService">
@@ -60,7 +58,8 @@
         </activity>
         <activity android:name=".activity.GameDisplayActivity">
         </activity>
-        <activity android:name=".activity.RegisterActivity">
+        <activity android:name=".activity.RegisterActivity"
+                  android:noHistory="true">
         </activity>
     </application>
 

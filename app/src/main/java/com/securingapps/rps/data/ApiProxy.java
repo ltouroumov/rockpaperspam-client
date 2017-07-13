@@ -11,6 +11,7 @@ import org.apache.commons.codec.binary.Hex;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.SocketTimeoutException;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class ApiProxy implements Interceptor {
 
     private static final String HOST = "http://10.0.2.2:8000";
+    //private static final String HOST = "http://api.rps-game.net";
     //private static final String HOST = "http://rps-cnc.herokuapp.com";
     private static final String TAG = ApiProxy.class.getSimpleName();
     private static ApiProxy _instance;
@@ -40,8 +42,8 @@ public class ApiProxy implements Interceptor {
     public ApiProxy() {
         client = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
                 .addInterceptor(this)
                 .build();
 
@@ -53,6 +55,8 @@ public class ApiProxy implements Interceptor {
     public String register() {
         OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
             .build();
 
         JsonObject body = new JsonObject();
@@ -137,6 +141,18 @@ public class ApiProxy implements Interceptor {
         doPost(body, "notifications/ack");
     }
 
+    public Response ping() throws IOException {
+        Request request = new Request.Builder()
+            .url(buildUrl("ping"))
+            .get()
+            .build();
+
+        return client.newBuilder()
+            .build()
+            .newCall(request)
+            .execute();
+    }
+
     public Response doGet(String endpoint, Object... args) {
         Request request = new Request.Builder()
                 .url(buildUrl(endpoint, args))
@@ -148,6 +164,15 @@ public class ApiProxy implements Interceptor {
         } catch (IOException e) {
             Log.e(TAG, String.format("Request to %s failed", endpoint), e);
             throw new RuntimeException(e);
+        }
+    }
+
+    public JsonElement doGetJson(String endpoint, Object... args) {
+        Response response = doGet(endpoint, args);
+        if (response.isSuccessful() && response.body() != null) {
+            return readJson(response.body().charStream());
+        } else {
+            return null;
         }
     }
 
@@ -260,4 +285,9 @@ public class ApiProxy implements Interceptor {
     public JsonElement readJson(String body) {
         return (new JsonParser()).parse(body);
     }
+
+    public JsonElement readJson(Reader body) {
+        return (new JsonParser()).parse(body);
+    }
+
 }

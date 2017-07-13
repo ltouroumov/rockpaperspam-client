@@ -30,8 +30,7 @@ public class RpsApplication extends Application implements Thread.UncaughtExcept
             return false;
         }
 
-        Log.d(TAG, "Number of activities started:" + activityLifecycleCallbacksHandler.getActivitiesStarted());
-        Log.d(TAG, "Number of activities resumed:" + activityLifecycleCallbacksHandler.getActivitiesResumed());
+        activityLifecycleCallbacksHandler.debug("Checking ...");
         return activityLifecycleCallbacksHandler.getActivitiesStarted() > 0;
     }
 
@@ -63,25 +62,25 @@ public class RpsApplication extends Application implements Thread.UncaughtExcept
         @Override
         public void onActivityStarted(Activity activity) {
             activitiesStarted++;
-            Log.d(TAG, "Activity Started:" + activity.getClass().getSimpleName());
+            debug("Started:" + activity.getClass().getSimpleName());
         }
 
         @Override
         public void onActivityResumed(Activity activity) {
             activitiesResumed++;
-            Log.d(TAG, "Activity Resumed:" + activity.getClass().getSimpleName());
+            debug("Resumed:" + activity.getClass().getSimpleName());
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
             activitiesResumed--;
-            Log.d(TAG, "Activity Paused:" + activity.getClass().getSimpleName());
+            debug("Paused:" + activity.getClass().getSimpleName());
         }
 
         @Override
         public void onActivityStopped(Activity activity) {
             activitiesStarted--;
-            Log.d(TAG, "Activity Stopped:" + activity.getClass().getSimpleName());
+            debug("Stopped:" + activity.getClass().getSimpleName());
         }
 
         @Override
@@ -92,6 +91,10 @@ public class RpsApplication extends Application implements Thread.UncaughtExcept
         @Override
         public void onActivityDestroyed(Activity activity) {
 
+        }
+
+        public void debug(String msg) {
+            Log.d(TAG, String.format("%s\nStarted: %d\nResumed: %d", msg, activitiesStarted, activitiesResumed));
         }
 
     }

@@ -90,9 +90,14 @@ public class PlayRoundActivity extends AppCompatActivity implements View.OnClick
                 if (resp.isSuccessful()) {
                     EventBus.getDefault().post(new InvalidateGameList());
                 } else if (isOutOfEnergy(resp)) {
-                    Toast.makeText(this, "Out of energy", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.oom_error_body), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Unkown error!\nPlease try again later.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.srv_error_body), Toast.LENGTH_SHORT).show();
+                    try {
+                        Log.e(TAG, String.format("Play error (%d): %s", resp.code(), resp.body().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 finish();
             }, new UiRunner(this));

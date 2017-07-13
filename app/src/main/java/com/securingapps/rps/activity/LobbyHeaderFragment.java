@@ -36,7 +36,8 @@ public class LobbyHeaderFragment extends Fragment {
     private TextView defeatsText;
     private TextView energyText;
     private Handler handler;
-    private boolean refresh;
+    private boolean refresh = false;
+    private boolean active = false;
     private StatsResponse lastResponse;
     private View energyView;
     private View lobbyHeader;
@@ -147,8 +148,11 @@ public class LobbyHeaderFragment extends Fragment {
                 }
             }
 
-            if (refresh)
+            if (refresh) {
                 handler.postDelayed(() -> this.updateStats(null), AUTO_REFRESH_RATE);
+            } else {
+                active = false;
+            }
         }, new UiRunner(getActivity()));
     }
 
@@ -156,7 +160,10 @@ public class LobbyHeaderFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         refresh = true;
-        handler.postDelayed(() -> this.updateStats(null), AUTO_REFRESH_RATE);
+        if (!active) {
+            active = true;
+            handler.postDelayed(() -> this.updateStats(null), AUTO_REFRESH_RATE);
+        }
         updateStats(null);
     }
 

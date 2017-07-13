@@ -69,6 +69,14 @@ public class DeviceData {
         return new String(Hex.encodeHex(secret));
     }
 
+    public static void clearSecret() {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.remove(PREF_SECRET);
+        editor.apply();
+
+        DeviceData.secret = null;
+    }
+
     public synchronized static void setSecret(byte[] secret) {
         String secretHex = new String(Hex.encodeHex(secret));
         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -107,4 +115,5 @@ public class DeviceData {
     public static boolean hasSecret() {
         return secret != null;
     }
+
 }

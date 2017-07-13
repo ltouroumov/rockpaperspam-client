@@ -6,7 +6,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import com.securingapps.rps.R;
+import com.securingapps.rps.data.ConfigManager;
 import com.securingapps.rps.data.Friend;
 
 public class GameStartActivity
@@ -53,9 +55,16 @@ public class GameStartActivity
     }
 
     private void sendInvite(Friend friend) {
+
+        String shareText = ConfigManager.getInstance().getString("share_message");
+        if (shareText == null) {
+            Toast.makeText(this, R.string.invite_your_friend_error, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_your_friend_text));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

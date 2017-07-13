@@ -108,7 +108,7 @@ public class ContactService {
         return AsyncFuture.supplyAsync(() -> ContactService.this.dupe(context, contactId, contactKey, target));
     }
 
-    private void sync(Context context) {
+    public void sync(Context context) {
         Log.d(LOG, "Syncing Contacts");
 
         ApiProxy.getInstance().syncContacts(this, context);

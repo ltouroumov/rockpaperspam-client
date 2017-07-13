@@ -81,38 +81,44 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Has Notification :)");
 
-            RemoteMessage.Notification notification = remoteMessage.getNotification();
-            String title;
-            if (notification.getTitle() == null) {
-                title = getString(notification.getTitleLocalizationKey(), notification.getTitleLocalizationArgs());
-            } else {
-                title = notification.getTitle();
+            if (!((RpsApplication)getApplication()).isForeground()) {
+                RemoteMessage.Notification notification = remoteMessage.getNotification();
+                showNotification(notificationId, notification);
             }
-
-            String body;
-            if (notification.getBody() == null) {
-                body = getString(notification.getBodyLocalizationKey(), notification.getBodyLocalizationArgs());
-            } else {
-                body = notification.getBody();
-            }
-
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(this)
-                    .setContentTitle(title)
-                    .setContentText(body)
-                    .setSmallIcon(R.drawable.rps_circle_shadow)
-                    .setContentIntent(
-                        PendingIntent.getActivity(this, 0,
-                            new Intent(this, LobbyActivity.class), PendingIntent.FLAG_CANCEL_CURRENT))
-                    .setAutoCancel(true);
-
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(notificationId, builder.build());
         }
 
         if (notificationId != 0) {
             ApiProxy.getInstance().ackNotification(notificationId);
         }
+    }
+
+    private void showNotification(int notificationId, RemoteMessage.Notification notification) {
+        String title;
+        if (notification.getTitle() == null) {
+            title = getString(notification.getTitleLocalizationKey(), notification.getTitleLocalizationArgs());
+        } else {
+            title = notification.getTitle();
+        }
+
+        String body;
+        if (notification.getBody() == null) {
+            body = getString(notification.getBodyLocalizationKey(), notification.getBodyLocalizationArgs());
+        } else {
+            body = notification.getBody();
+        }
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setSmallIcon(R.drawable.rps_circle_shadow)
+                .setContentIntent(
+                    PendingIntent.getActivity(this, 0,
+                        new Intent(this, LobbyActivity.class), PendingIntent.FLAG_CANCEL_CURRENT))
+                .setAutoCancel(true);
+
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(notificationId, builder.build());
     }
 
     private String getString(String locKey, String[] locArgs) {

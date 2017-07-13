@@ -36,4 +36,22 @@
     <string name="notif_test_body">Body of Notification</string>
     <string name="maximum_energy">Maximum Energy: %1$d</string>
     <string name="regeneration_rate">Regeneration Rate: %1$.0f/h</string>
+    <string name="net_error_title">Server Error</string>
+    <string name="net_error_body">There was an error while contacting the game servers.</string>
+    <string name="ok">OK</string>
+    <string name="auth_error_title">Authentication Error</string>
+    <string name="auth_error_body">The server was unable to authenticate your device.</string>
+    <string name="srv_error_title">Server Error</string>
+    <string name="srv_error_body">There was an error while communicating with the server.</string>
+    <string name="oom_error_body">Out of energy.\nTap the energy label for info.</string>
+
+    <string name="notif_game_over_title">Game Complete</string>
+    <string name="notif_game_over_body">Your game with %1$s is over you %2$s</string>
+
+    <string name="notif_new_game_title">New Game</string>
+    <string name="notif_new_game_body">%1$s challenged you to a game.</string>
+
+    <string name="notif_new_round_title">%1$s played</string>
+    <string name="notif_new_round_body">%1$s made their move.</string>
+    <string name="invite_your_friend_error">There was an error while generating the invite message.</string>
 </resources>

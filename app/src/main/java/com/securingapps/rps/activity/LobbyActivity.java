@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.securingapps.rps.R;
 import com.securingapps.rps.data.Challenge;
+import com.securingapps.rps.data.ConfigManager;
 import com.securingapps.rps.data.ContactService;
 import com.securingapps.rps.data.GameService;
+import com.securingapps.rps.utils.async.AsyncFuture;
 import com.securingapps.rps.utils.fn.Supplier;
 
 public class LobbyActivity extends AppCompatActivity implements ChallengesFragment.OnChallengeSelected {
@@ -33,13 +35,12 @@ public class LobbyActivity extends AppCompatActivity implements ChallengesFragme
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    // private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
-
+    // private ViewPager mViewPager;
     public LobbyActivity() {
     }
 
@@ -56,20 +57,25 @@ public class LobbyActivity extends AppCompatActivity implements ChallengesFragme
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        // mViewPager = (ViewPager) findViewById(R.id.container);
+        // mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        // TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        // tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(LobbyActivity.this, GameStartActivity.class);
             startActivityForResult(intent, REQUEST_OPPONENT);
         });
+
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.container, ChallengesFragment.newInstance("O"))
+            .commit();
     }
 
     @Override
@@ -114,55 +120,65 @@ public class LobbyActivity extends AppCompatActivity implements ChallengesFragme
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Refresh config when we get back to the home screen
+        AsyncFuture.runAsync(() -> {
+            ConfigManager.getInstance().refresh();
+        });
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private Fragment[] fragments;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-            fragments = new Fragment[2];
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-                case 0:
-                    return getOrCreate(0, () -> ChallengesFragment.newInstance("O"));
-                case 1:
-                    return getOrCreate(1, () -> ChallengesFragment.newInstance("C"));
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Matches";
-                case 1:
-                    return "History";
-            }
-            return null;
-        }
-
-        private Fragment getOrCreate(int idx, Supplier<Fragment> creator) {
-            if (fragments[idx] == null) {
-                fragments[idx] = creator.get();
-            }
-
-            return fragments[idx];
-        }
-    }
+//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+//
+//        private Fragment[] fragments;
+//
+//        public SectionsPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//            fragments = new Fragment[2];
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            // getItem is called to instantiate the fragment for the given page.
+//            // Return a PlaceholderFragment (defined as a static inner class below).
+//            switch (position) {
+//                case 0:
+//                    return getOrCreate(0, () -> ChallengesFragment.newInstance("O"));
+//                case 1:
+//                    return getOrCreate(1, () -> ChallengesFragment.newInstance("C"));
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            // Show 3 total pages.
+//            return 2;
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return "Matches";
+//                case 1:
+//                    return "History";
+//            }
+//            return null;
+//        }
+//
+//        private Fragment getOrCreate(int idx, Supplier<Fragment> creator) {
+//            if (fragments[idx] == null) {
+//                fragments[idx] = creator.get();
+//            }
+//
+//            return fragments[idx];
+//        }
+//    }
 }
