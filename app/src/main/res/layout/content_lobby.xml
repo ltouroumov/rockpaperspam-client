@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_lobby"
-        tools:context="com.securingapps.rps.activity.LobbyActivity">
+        tools:context="com.tricktrap.rps.activity.LobbyActivity">
 
     <LinearLayout
             android:id="@+id/heading"
@@ -20,7 +20,7 @@
 
         <fragment
                 android:layout_width="match_parent"
-                android:name="com.securingapps.rps.activity.LobbyHeaderFragment"
+                android:name="com.tricktrap.rps.activity.LobbyHeaderFragment"
                 android:id="@+id/fragment" tools:layout="@layout/fragment_lobby_header" android:layout_height="130dp"/>
 
         <!-- <android.support.design.widget.TabLayout

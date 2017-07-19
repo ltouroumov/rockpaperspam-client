@@ -5,7 +5,7 @@
             android:columnCount="3"
             android:background="@color/colorPrimary"
             android:id="@+id/lobbyHeader"
-            tools:context="com.securingapps.rps.activity.LobbyHeaderFragment" android:layout_height="120dp">
+            tools:context="com.tricktrap.rps.activity.LobbyHeaderFragment" android:layout_height="120dp">
 
     <LinearLayout
             android:orientation="vertical"
