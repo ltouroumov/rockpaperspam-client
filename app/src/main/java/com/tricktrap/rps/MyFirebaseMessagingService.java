@@ -10,8 +10,10 @@ import android.util.Log;
 import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 import com.tricktrap.rps.activity.LobbyActivity;
 import com.tricktrap.rps.data.ApiProxy;
+import com.tricktrap.rps.data.Contact;
 import com.tricktrap.rps.data.ContactService;
 import com.tricktrap.rps.events.InvalidateGameList;
 import com.tricktrap.rps.utils.async.AsyncUtils;
@@ -44,6 +46,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
             if (data.containsKey("action")) {
+
+                long contactId = 0;
+                String contactKey = null;
+
                 String action = data.get("action");
                 Log.d(TAG, "Action:" + action);
                 switch (action) {
@@ -55,11 +61,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             });
                         }
                         break;
-                    case "dupe":
-                        long contactId = Long.parseLong(data.get("contact_id"));
-                        String contactKey = data.get("contact_key");
+                    case "contact.new":
+                        String thePayload = data.get("payload");
+                        Contact.Raw theContact = new Gson().fromJson(thePayload, Contact.Raw.class);
+                        ContactService.getInstance().getManager().create(this, theContact);
+                        break;
+                    case "contact.del":
+                        contactId = Long.parseLong(data.get("contact_id"));
+                        contactKey = data.get("contact_key");
+                        ContactService.getInstance().getManager().delete(this, contactId, contactKey);
+                        break;
+                    case "contact.dup":
+                        contactId = Long.parseLong(data.get("contact_id"));
+                        contactKey = data.get("contact_key");
                         String target = data.get("target");
-                        ContactService.getInstance().dupeAsync(this, contactId, contactKey, target);
+                        ContactService.getInstance().getManager().duplicate(this, contactId, contactKey, target);
                         if (BuildConfig.DEBUG) {
                             AsyncUtils.runOnMainThread(() -> {
                                 Toast.makeText(getApplicationContext(), "Duping ...", Toast.LENGTH_SHORT).show();
