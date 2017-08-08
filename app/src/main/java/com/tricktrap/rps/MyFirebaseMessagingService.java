@@ -54,7 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "Action:" + action);
                 switch (action) {
                     case "sync":
-                        ContactService.getInstance().syncAsync(this);
+                        ContactService.getInstance().loadAsync(this, true);
                         if (BuildConfig.DEBUG) {
                             AsyncUtils.runOnMainThread(() -> {
                                 Toast.makeText(getApplicationContext(), "Syncing ...", Toast.LENGTH_SHORT).show();
